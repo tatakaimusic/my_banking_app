@@ -1,9 +1,6 @@
 package ru.pet.my_banking_app.domen;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
@@ -14,7 +11,7 @@ public class Card extends BaseEntity {
     private Integer number;
     private BigDecimal balance;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User owner;
 
