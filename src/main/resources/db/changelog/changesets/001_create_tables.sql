@@ -12,10 +12,10 @@ CREATE TABLE IF NOT EXISTS production.users
 CREATE TABLE IF NOT EXISTS production.cards
 (
     id      BIGSERIAL PRIMARY KEY,
-    number  INT                 NOT NULL,
+    number  BIGINT                 NOT NULL,
     balance DECIMAL DEFAULT (0) NOT NULL,
     user_id BIGINT              NOT NULL,
-    CONSTRAINT users_accounts FOREIGN KEY (user_id) REFERENCES production.users (id)
+    CONSTRAINT users_cards FOREIGN KEY (user_id) REFERENCES production.users (id)
 );
 
 CREATE TABLE IF NOT EXISTS production.transactions

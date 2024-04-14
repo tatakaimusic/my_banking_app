@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 @Table(name = "cards")
 public class Card extends BaseEntity {
 
-    private Integer number;
+    private Long number;
     private BigDecimal balance;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -18,17 +18,17 @@ public class Card extends BaseEntity {
     public Card() {
     }
 
-    public Card(Integer number, BigDecimal balance, User owner) {
+    public Card(Long number, BigDecimal balance, User owner) {
         this.number = number;
         this.balance = balance;
         this.owner = owner;
     }
 
-    public Integer getNumber() {
+    public Long getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(Long number) {
         this.number = number;
     }
 
