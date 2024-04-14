@@ -2,7 +2,6 @@ package ru.pet.my_banking_app.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.pet.my_banking_app.domen.Transaction;
 import ru.pet.my_banking_app.domen.exception.InsufficientFundsException;
@@ -30,9 +29,7 @@ public class TransactionServiceImpl implements TransactionService {
         this.transactionRepository = transactionRepository;
     }
 
-    @Transactional(
-            isolation = Isolation.REPEATABLE_READ
-    )
+    @Transactional()
     public Transaction doTransaction(
             Long cardFromId, Long cardToId, BigDecimal amount
     ) {
@@ -44,10 +41,8 @@ public class TransactionServiceImpl implements TransactionService {
         if (balanceFrom.subtract(amount).compareTo(amount) < 0) {
             throw new InsufficientFundsException();
         }
-
         cardRepository.updateBalanceByCardId(cardFromId, balanceFrom.subtract(amount));
         cardRepository.updateBalanceByCardId(cardToId, balanceTo.add(amount));
-
         return transactionRepository.save(
                 new Transaction(
                         cardFromId,
@@ -57,6 +52,5 @@ public class TransactionServiceImpl implements TransactionService {
                 )
         );
     }
-
 
 }
