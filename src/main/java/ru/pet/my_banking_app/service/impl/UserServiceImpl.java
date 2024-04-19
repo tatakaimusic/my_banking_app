@@ -4,14 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.pet.my_banking_app.domen.Card;
 import ru.pet.my_banking_app.domen.User;
 import ru.pet.my_banking_app.domen.exception.ResourceNotFoundException;
 import ru.pet.my_banking_app.repository.CardRepository;
 import ru.pet.my_banking_app.repository.UserRepository;
 import ru.pet.my_banking_app.service.UserService;
 
-import java.math.BigDecimal;
 import java.util.Random;
 
 @Service
@@ -64,8 +62,8 @@ public class UserServiceImpl implements UserService {
                 )
         );
         User createdUser = userRepository.save(user);
-        Card card = new Card(generateNumber(), BigDecimal.ZERO, createdUser);
-        cardRepository.save(card);
+//        Card card = new Card(generateNumber(), BigDecimal.ZERO, createdUser);
+//        cardRepository.save(card);
         return createdUser;
     }
 

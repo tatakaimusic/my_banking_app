@@ -1,5 +1,7 @@
 package ru.pet.my_banking_app.web.dto;
 
+import ru.pet.my_banking_app.domen.Currency;
+
 import java.math.BigDecimal;
 
 public class TransactionData {
@@ -7,11 +9,13 @@ public class TransactionData {
     private Long cardIdFrom;
     private Long cardIdTo;
     private BigDecimal amount;
+    private Currency currency;
 
-    public TransactionData(Long cardIdFrom, Long cardIdTo, BigDecimal amount) {
+    public TransactionData(Long cardIdFrom, Long cardIdTo, BigDecimal amount, Currency currency) {
         this.cardIdFrom = cardIdFrom;
         this.cardIdTo = cardIdTo;
         this.amount = amount;
+        this.currency = currency;
     }
 
     public Long getCardIdFrom() {
@@ -36,6 +40,14 @@ public class TransactionData {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
 }

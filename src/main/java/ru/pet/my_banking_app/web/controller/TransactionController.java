@@ -31,7 +31,8 @@ public class TransactionController {
                 transactionService.doTransaction(
                         transactionData.getCardIdFrom(),
                         transactionData.getCardIdTo(),
-                        transactionData.getAmount()
+                        transactionData.getAmount(),
+                        transactionData.getCurrency()
                 )
         );
     }

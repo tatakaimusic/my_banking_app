@@ -11,6 +11,9 @@ public class Card extends BaseEntity {
     private Long number;
     private BigDecimal balance;
 
+    @Enumerated(value = EnumType.STRING)
+    private Currency currency;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User owner;
@@ -18,9 +21,11 @@ public class Card extends BaseEntity {
     public Card() {
     }
 
-    public Card(Long number, BigDecimal balance, User owner) {
+    public Card(Long id, Long number, BigDecimal balance, Currency currency, User owner) {
+        super(id);
         this.number = number;
         this.balance = balance;
+        this.currency = currency;
         this.owner = owner;
     }
 
@@ -38,6 +43,14 @@ public class Card extends BaseEntity {
 
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
     public User getOwner() {

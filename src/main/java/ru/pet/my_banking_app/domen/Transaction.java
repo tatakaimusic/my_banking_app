@@ -1,6 +1,8 @@
 package ru.pet.my_banking_app.domen;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
@@ -8,20 +10,24 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transactions")
-public class Transaction extends BaseEntity{
+public class Transaction extends BaseEntity {
 
     private Long cardFrom;
     private Long cardTo;
     private BigDecimal amount;
+
+    @Enumerated(value = EnumType.STRING)
+    private Currency currency;
     private LocalDateTime dateTime;
 
     public Transaction() {
     }
 
-    public Transaction(Long cardFrom, Long cardTo, BigDecimal amount, LocalDateTime dateTime) {
+    public Transaction(Long cardFrom, Long cardTo, BigDecimal amount, Currency currency, LocalDateTime dateTime) {
         this.cardFrom = cardFrom;
         this.cardTo = cardTo;
         this.amount = amount;
+        this.currency = currency;
         this.dateTime = dateTime;
     }
 
@@ -47,6 +53,14 @@ public class Transaction extends BaseEntity{
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
     public LocalDateTime getDateTime() {

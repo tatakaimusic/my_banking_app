@@ -7,16 +7,17 @@ import org.springframework.stereotype.Repository;
 import ru.pet.my_banking_app.domen.Card;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long> {
 
     @Query(value = """
-            SELECT balance FROM cards 
+            SELECT * FROM cards 
             WHERE id = :cardId 
             FOR UPDATE 
             """, nativeQuery = true)
-    BigDecimal getBalanceByCardId(Long cardId);
+    Optional<Card> getCardById(Long cardId);
 
     @Modifying
     @Query(value = """
