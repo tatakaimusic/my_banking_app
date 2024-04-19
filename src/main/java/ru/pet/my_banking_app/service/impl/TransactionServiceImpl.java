@@ -29,7 +29,7 @@ public class TransactionServiceImpl implements TransactionService {
         this.transactionRepository = transactionRepository;
     }
 
-    @Transactional()
+    @Transactional
     public Transaction doTransaction(
             Long cardFromId, Long cardToId, BigDecimal amount
     ) {

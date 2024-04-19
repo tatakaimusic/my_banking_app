@@ -3,6 +3,7 @@ package ru.pet.my_banking_app.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.pet.my_banking_app.domen.Card;
 import ru.pet.my_banking_app.domen.User;
 import ru.pet.my_banking_app.domen.exception.ResourceNotFoundException;
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.Random;
 
 @Service
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -48,6 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User create(User user) {
         if (userRepository.getUserByEmail(user.getEmail()).isPresent()) {
             throw new IllegalStateException(

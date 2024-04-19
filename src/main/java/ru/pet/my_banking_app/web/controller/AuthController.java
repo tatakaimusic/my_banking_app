@@ -1,10 +1,7 @@
 package ru.pet.my_banking_app.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.pet.my_banking_app.domen.User;
 import ru.pet.my_banking_app.service.AuthService;
 import ru.pet.my_banking_app.service.UserService;
@@ -29,7 +26,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public UserDTO register(@RequestBody UserDTO dto) {
+    public UserDTO register(
+            @RequestBody UserDTO dto
+    ) {
         User user = userMapper.toEntity(dto);
         return userMapper.toDto(
                 userService.create(user)
@@ -37,8 +36,17 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public JwtResponse login(@RequestBody JwtRequest loginRequest) {
+    public JwtResponse login(
+            @RequestBody JwtRequest loginRequest
+    ) {
         return authService.login(loginRequest);
+    }
+
+    @PostMapping("/refresh")
+    public JwtResponse refresh(
+            @RequestParam(value = "token") String token
+    ) {
+        return authService.refresh(token);
     }
 
 }
