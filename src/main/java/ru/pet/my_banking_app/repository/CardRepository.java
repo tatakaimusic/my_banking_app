@@ -27,4 +27,12 @@ public interface CardRepository extends JpaRepository<Card, Long> {
             """, nativeQuery = true)
     void updateBalanceByCardId(Long cardId, BigDecimal balance);
 
+    @Modifying
+    @Query(value = """
+              UPDATE cards 
+              SET user_id = :userId
+              WHERE id = :cardId
+            """, nativeQuery = true)
+    void assignUserToCard(Long cardId, Long userId);
+
 }

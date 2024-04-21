@@ -1,7 +1,14 @@
 package ru.pet.my_banking_app.web.dto;
 
+import jakarta.validation.constraints.NotNull;
+import ru.pet.my_banking_app.web.dto.validation.OnUpdate;
+
 public abstract class BaseEntityDTO {
 
+    @NotNull(
+            message = "Id must be not null!",
+            groups = OnUpdate.class
+    )
     private Long id;
 
     public BaseEntityDTO() {
