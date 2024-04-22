@@ -1,10 +1,13 @@
 package ru.pet.my_banking_app.config;
 
+import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
+import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -19,9 +22,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import ru.pet.my_banking_app.web.security.JwtTokenFilter;
 import ru.pet.my_banking_app.web.security.JwtTokenProvider;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@EnableKafka
 public class ApplicationConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -69,6 +76,15 @@ public class ApplicationConfig {
                 .addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
+    }
+
+    @Bean
+    public XML producerXML() {
+        try {
+            return new XMLDocument(new File("src/main/resources/kafka/producer.xml"));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

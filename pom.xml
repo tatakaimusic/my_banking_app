@@ -23,6 +23,9 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <jjwt.version>0.11.5</jjwt.version>
         <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
+        <spring-kafka.version>3.0.11</spring-kafka.version>
+        <reactor-kafka.version>1.3.22</reactor-kafka.version>
+        <jcabi-xml.version>0.29.0</jcabi-xml.version>
     </properties>
 
     <dependencies>
@@ -106,6 +109,24 @@
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate-validator.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>${spring-kafka.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.projectreactor.kafka</groupId>
+            <artifactId>reactor-kafka</artifactId>
+            <version>${reactor-kafka.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-xml</artifactId>
+            <version>${jcabi-xml.version}</version>
         </dependency>
 
     </dependencies>
