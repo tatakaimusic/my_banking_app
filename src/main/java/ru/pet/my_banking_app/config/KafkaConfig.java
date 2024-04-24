@@ -29,8 +29,8 @@ public class KafkaConfig {
     }
 
     @Bean
-    public NewTopic registrationTopic() {
-        return TopicBuilder.name("registration")
+    public NewTopic emailConfirmationTopic() {
+        return TopicBuilder.name("email_confirmation")
                 .partitions(5)
                 .replicas(1)
                 .config(

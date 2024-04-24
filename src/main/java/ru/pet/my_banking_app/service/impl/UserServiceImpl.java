@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.pet.my_banking_app.domen.User;
 import ru.pet.my_banking_app.domen.exception.ResourceNotFoundException;
-import ru.pet.my_banking_app.repository.CardRepository;
+import ru.pet.my_banking_app.repository.EmailRedisRepository;
 import ru.pet.my_banking_app.repository.UserRepository;
 import ru.pet.my_banking_app.service.UserService;
 
@@ -16,13 +16,17 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final CardRepository cardRepository;
+    private final EmailRedisRepository emailRedisRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, CardRepository cardRepository) {
+    public UserServiceImpl(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            EmailRedisRepository emailRedisRepository
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.cardRepository = cardRepository;
+        this.emailRedisRepository = emailRedisRepository;
     }
 
     @Override
@@ -47,7 +51,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User create(User user) {
+    public User register(User user, String code) {
+        String rightCode = emailRedisRepository.getCode(user.getEmail());
+        if (rightCode == null) {
+            throw new IllegalStateException(
+                    "Code is expired!"
+            );
+        }
+        if (!code.equals(rightCode)) {
+            throw new IllegalStateException(
+                    "Code is incorrect!"
+            );
+        }
+        emailRedisRepository.deleteCode(user.getEmail());
         if (userRepository.getUserByEmail(user.getEmail()).isPresent()) {
             throw new IllegalStateException(
                     "User with this email already exist!"

@@ -8,6 +8,6 @@ public interface UserService {
 
     User getById(Long id);
 
-    User create(User user);
+    User register(User user, String code);
 
 }
