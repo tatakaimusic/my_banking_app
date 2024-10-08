@@ -5,6 +5,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 import ru.pet.my_banking_app.domen.User;
 import ru.pet.my_banking_app.service.AuthService;
+import ru.pet.my_banking_app.service.KafkaService;
 import ru.pet.my_banking_app.service.UserService;
 import ru.pet.my_banking_app.web.dto.auth.JwtRequest;
 import ru.pet.my_banking_app.web.dto.auth.JwtResponse;
@@ -16,11 +17,18 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final KafkaService kafkaService;
 
-    public AuthServiceImpl(AuthenticationManager authenticationManager, UserService userService, JwtTokenProvider jwtTokenProvider) {
+    public AuthServiceImpl(
+            AuthenticationManager authenticationManager,
+            UserService userService,
+            JwtTokenProvider jwtTokenProvider,
+            KafkaService kafkaService
+    ) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.kafkaService = kafkaService;
     }
 
 

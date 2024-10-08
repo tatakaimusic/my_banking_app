@@ -10,4 +10,8 @@ public interface UserService {
 
     User register(User user, String code);
 
+    void sendConfirmationEmail(String email);
+
+    void sendResetEmail(String email);
+
 }

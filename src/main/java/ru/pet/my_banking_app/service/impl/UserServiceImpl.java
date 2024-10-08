@@ -4,10 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.pet.my_banking_app.domen.PasswordRestore;
 import ru.pet.my_banking_app.domen.User;
+import ru.pet.my_banking_app.domen.exception.ConfirmationCodeExpiredException;
 import ru.pet.my_banking_app.domen.exception.ResourceNotFoundException;
 import ru.pet.my_banking_app.repository.EmailRedisRepository;
 import ru.pet.my_banking_app.repository.UserRepository;
+import ru.pet.my_banking_app.service.KafkaService;
 import ru.pet.my_banking_app.service.UserService;
 
 @Service
@@ -17,16 +20,18 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailRedisRepository emailRedisRepository;
+    private final KafkaService kafkaService;
 
     @Autowired
     public UserServiceImpl(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            EmailRedisRepository emailRedisRepository
-    ) {
+            EmailRedisRepository emailRedisRepository,
+            KafkaService kafkaService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailRedisRepository = emailRedisRepository;
+        this.kafkaService = kafkaService;
     }
 
     @Override
@@ -50,25 +55,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void sendConfirmationEmail(String email) {
+        if (userRepository.getUserByEmail(email).isPresent()) {
+            throw new IllegalArgumentException(
+                    "User with this email already exist!"
+            );
+        }
+        kafkaService.sendEmailConfirmation(email);
+    }
+
+
+    @Override
     @Transactional
     public User register(User user, String code) {
         String rightCode = emailRedisRepository.getCode(user.getEmail());
         if (rightCode == null) {
-            throw new IllegalStateException(
-                    "Code is expired!"
-            );
+            throw new ConfirmationCodeExpiredException();
         }
         if (!code.equals(rightCode)) {
-            throw new IllegalStateException(
+            throw new IllegalArgumentException(
                     "Code is incorrect!"
             );
         }
         emailRedisRepository.deleteCode(user.getEmail());
-        if (userRepository.getUserByEmail(user.getEmail()).isPresent()) {
-            throw new IllegalStateException(
-                    "User with this email already exist!"
-            );
-        }
+
 
         user.setPassword(
                 passwordEncoder.encode(
@@ -78,5 +88,15 @@ public class UserServiceImpl implements UserService {
         User createdUser = userRepository.save(user);
         return createdUser;
     }
+
+    @Override
+    public void sendResetEmail(String email) {
+        kafkaService.sendResetPasswordEmail(email);
+    }
+
+//    @Override
+//    public void restorePassword(PasswordRestore passwordRestore) {
+//
+//    }
 
 }

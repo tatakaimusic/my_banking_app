@@ -4,4 +4,6 @@ public interface KafkaService {
 
     void sendEmailConfirmation(String email);
 
+    void sendResetPasswordEmail(String email);
+
 }

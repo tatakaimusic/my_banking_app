@@ -20,19 +20,27 @@ public class KafkaServiceImpl implements KafkaService {
 
     @Override
     public void sendEmailConfirmation(String email) {
+        sendEmail(email, Topic.EMAIL_CONFIRMATION);
+    }
+
+    @Override
+    public void sendResetPasswordEmail(String email) {
+        sendEmail(email, Topic.PASSWORD_RESTORE);
+    }
+
+    private void sendEmail(String email, Topic topic) {
         kafkaSender.send(
-                        Mono.just(
-                                SenderRecord.create(
-                                        Topic.EMAIL_CONFIRMATION.toString().toLowerCase(),
-                                        0,
-                                        System.currentTimeMillis(),
-                                        String.valueOf(email),
-                                        email,
-                                        null
-                                )
+                Mono.just(
+                        SenderRecord.create(
+                                topic.toString().toLowerCase(),
+                                0,
+                                System.currentTimeMillis(),
+                                String.valueOf(email),
+                                email,
+                                null
                         )
                 )
-                .subscribe();
+        );
     }
 
 }

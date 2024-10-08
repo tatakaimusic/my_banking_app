@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 import reactor.kafka.sender.KafkaSender;
 import reactor.kafka.sender.SenderOptions;
+import ru.pet.my_banking_app.domen.kafka.Topic;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -30,7 +31,19 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic emailConfirmationTopic() {
-        return TopicBuilder.name("email_confirmation")
+        return TopicBuilder.name(Topic.EMAIL_CONFIRMATION.name().toLowerCase())
+                .partitions(5)
+                .replicas(1)
+                .config(
+                        TopicConfig.RETENTION_MS_CONFIG,
+                        String.valueOf(Duration.ofDays(7).toMillis())
+                )
+                .build();
+    }
+
+    @Bean
+    public NewTopic passwordRestoreTopic() {
+        return TopicBuilder.name(Topic.PASSWORD_RESTORE.name().toLowerCase())
                 .partitions(5)
                 .replicas(1)
                 .config(
